@@ -40,7 +40,6 @@ public class DaoMateria {
 		
 		Type listType = new TypeToken<ArrayList<Materia>>(){}.getType();
 		List<Materia> yourClassList = new ArrayList<Materia>();
-		String nio;
 		try {
 			yourClassList = new Gson().fromJson(jsonArray, listType);
 		} catch (Exception e) {

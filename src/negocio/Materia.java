@@ -32,4 +32,5 @@ public class Materia {
 	public int getHoraFin() {
 		return horaFin;
 	}
+	
 }
