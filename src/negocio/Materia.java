@@ -1,6 +1,13 @@
 package negocio;
 
-public class Materia {
+import java.io.Serializable;
+
+public class Materia implements Serializable {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 
 	private String nombre;
 	
@@ -32,5 +39,6 @@ public class Materia {
 	public int getHoraFin() {
 		return horaFin;
 	}
+
 	
 }

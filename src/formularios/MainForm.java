@@ -59,6 +59,7 @@ public class MainForm {
 		            Universidad uni = new Universidad();
 		            try {
 						uni.agregarMaterias(file.getPath());
+						uni.procesar();
 					} catch (Exception e1) {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();

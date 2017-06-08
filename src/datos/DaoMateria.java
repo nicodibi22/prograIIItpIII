@@ -32,13 +32,13 @@ public class DaoMateria {
         "c": true
     }
 ]}";*/
-		List<Materia> yourClassList = new ArrayList<Materia>();
+		ArrayList<Materia> yourClassList = new ArrayList<Materia>();
 		try {
 			JsonLector<Materia> reader = new JsonLector<Materia>();
 			yourClassList = reader.getArrayObject(nombreArchivo);
 		} catch (Exception e) {
 			throw new Exception(e.getMessage());
 		}
-		return (ArrayList<Materia>) yourClassList;
+		return yourClassList;
 	}
 }
