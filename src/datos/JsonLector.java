@@ -10,7 +10,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.google.gson.stream.JsonReader;
 
-public class JsonReador<T> {
+public class JsonLector<T> {
 
 	public List<T> getArrayObject(String nombreArchivo) {
 		

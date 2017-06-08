@@ -34,7 +34,7 @@ public class DaoMateria {
 ]}";*/
 		List<Materia> yourClassList = new ArrayList<Materia>();
 		try {
-			JsonReador<Materia> reader = new JsonReador<Materia>();
+			JsonLector<Materia> reader = new JsonLector<Materia>();
 			yourClassList = reader.getArrayObject(nombreArchivo);
 		} catch (Exception e) {
 			throw new Exception(e.getMessage());
