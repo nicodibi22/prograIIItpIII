@@ -15,9 +15,9 @@ public class Universidad {
 		_aulas = new ArrayList<Aula>();
 	}
 	
-	public boolean agregarMaterias() throws Exception {
+	public boolean agregarMaterias(String nombreArchivo) throws Exception {
 		
-		_materias = DaoMateria.getMaterias();
+		_materias = DaoMateria.getMaterias(nombreArchivo);
 		return true;
 	}
 	
