@@ -30,7 +30,7 @@ public class Universidad {
 	}
 	
 	public void agregarAula() {
-		_aulas.add(new Aula(""));
+		_aulas.add(Aula.aulaNueva("A" + _aulas.size()));
 	}
 	
 	public int cantidadAulas() {
@@ -51,8 +51,23 @@ public class Universidad {
 	
 	
 	private void asignarAula(Materia materia) {
+		Aula aulaAsignar = Aula.aulaVacia();
+		boolean hayAulaVacia = false;
+		for(Aula aula : _aulas) {
+			if(!estaOcupada(aula, materia.getHoraInicio(), materia.getHoraFin())) {
+				aulaAsignar = aula;
+				hayAulaVacia = true; 				
+			} 
+		}
+		if(!hayAulaVacia) {
+			agregarAula();
+			_asignaciones.put(_aulas.get(cantidadAulas()- 1), new ArrayList<Materia>());
+		}
 		
-		
+		List<Materia> materiasAula = _asignaciones.get(aulaAsignar);
+		materiasAula.add(materia);
+		_asignaciones.put(aulaAsignar, materiasAula);
+
 		
 	}
 
@@ -64,8 +79,8 @@ public class Universidad {
 		
 		for(Materia mat : _asignaciones.get(aula)) {
 			if(mat.getHoraInicio() <= horaInicio &&  mat.getHoraFin() >  horaInicio
-					|| mat.getHoraInicio() < horaFin && mat.getHoraFin() > horaFin) {
-				
+					|| mat.getHoraInicio() < horaFin && mat.getHoraFin() >= horaFin) {
+				return true;
 			}
 		}
 		return false;

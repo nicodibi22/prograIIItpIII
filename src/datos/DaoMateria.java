@@ -16,29 +16,26 @@ public class DaoMateria {
 
 	public static ArrayList<Materia> getMaterias(String nombreArchivo) throws Exception {
 		
-		/*String jsonArray = "[" +
-				            "{" +
-        "\"nombre\": \"value1\","+
-        "\"codigo\": \"value1\","+
-        "\"horaInicio\": 10," +
-        "\"horaFin\": 10 }," +
-         "{" +
-"\"nombre\": \"value1\","+
-"\"codigo\": \"value1\","+
-"\"horaInicio\": 10," +
-"\"horaFin\": 10 }" + "]"		
-        + "";/*,
+		/*String jsonArray = [
+	{
+		"nombre": "value1",
+		"codigo": "value1",
+		"horaInicio": 10,
+		"horaFin": 10 
+	},
     {
-        "a": 200,
-        "b": "value2",
-        "c": false
-    },
+		"nombre": "value2",
+		"codigo": "value2",
+		"horaInicio": 11,
+		"horaFin": 12 
+	},
     {
-        "a": 300,
-        "b": "value3",
-        "c": true
-    }
-]}";*/
+		"nombre": "value3",
+		"codigo": "value3",
+		"horaInicio": 8,
+		"horaFin": 10 
+	}
+]*/
 		ArrayList<Materia> yourClassList;
 		try {
 			
