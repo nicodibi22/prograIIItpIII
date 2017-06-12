@@ -43,10 +43,31 @@ public class Universidad {
 	
 	public void procesar() {		
 		ordenarMateriasPorHorarioInicio();
+		
+		for (Materia materia : _materias) {
+			asignarAula(materia);
+		}
 	}
 	
 	
+	private void asignarAula(Materia materia) {
+		
+		
+		
+	}
+
 	private void ordenarMateriasPorHorarioInicio() {
 		Collections.sort(_materias, (p1, p2) -> p1.getHoraInicio() - p2.getHoraInicio());
+	}
+	
+	public boolean estaOcupada(Aula aula, int horaInicio, int horaFin) {
+		
+		for(Materia mat : _asignaciones.get(aula)) {
+			if(mat.getHoraInicio() <= horaInicio &&  mat.getHoraFin() >  horaInicio
+					|| mat.getHoraInicio() < horaFin && mat.getHoraFin() > horaFin) {
+				
+			}
+		}
+		return false;
 	}
 }
