@@ -6,32 +6,40 @@ import java.awt.EventQueue;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JButton;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JTable;
-import javax.swing.table.AbstractTableModel;
-import javax.swing.table.DefaultTableModel;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.io.File;
 import java.util.ArrayList;
-import java.util.List;
+
+import javax.swing.JLabel;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 import negocio.Asignacion;
-import negocio.Materia;
+import negocio.LectorArchivo;
+import negocio.SolverGoloso;
 import negocio.Universidad;
-
 import java.awt.BorderLayout;
+import javax.swing.SwingConstants;
+import java.awt.FlowLayout;
+
 
 public class MainForm {
 
 	private JFrame frame;
-
-	private JFileChooser fileChooser = new JFileChooser();
+	private JPanel ctrlPane;
+	private JFileChooser fileChooser;
 	private JTable table;
 	private JScrollPane tableScrollPane;
+	private JLabel lblNombreArchivo;
+	private JLabel lblCantidadAulas;
+	
+	private String pathArchivo;
 	
 	/**
 	 * Launch the application.
@@ -40,8 +48,9 @@ public class MainForm {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					MainForm window = new MainForm();
-					window.frame.setVisible(true);
+					MainForm window = new MainForm();					
+					window.frame.setVisible(true);	
+					
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -60,126 +69,98 @@ public class MainForm {
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
-		frame = new JFrame();
 	
 		CustomModel model = new CustomModel(new ArrayList<Asignacion>());
-		table = new JTable(model);
-
-		tableScrollPane = new JScrollPane(table);
-		
-		        tableScrollPane.setPreferredSize(new Dimension(250, 200));
-		
-		 
-				
+		table = new JTable(model);		
+		tableScrollPane = new JScrollPane(table);		
+		tableScrollPane.setPreferredSize(new Dimension(700, 200));
+		lblNombreArchivo = new JLabel("");				
+		lblNombreArchivo.setBounds(10, 9, 327, 19);
+		JLabel lblTotalAulasNecesarias = new JLabel("Total Aulas Necesarias:");
+        lblTotalAulasNecesarias.setHorizontalAlignment(SwingConstants.LEFT);               
+        lblCantidadAulas = new JLabel("");
+        lblCantidadAulas.setHorizontalAlignment(SwingConstants.LEFT);		
+		ctrlPane = new JPanel();
+		ctrlPane.setLayout(null);				
+        JSplitPane splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT,
+                ctrlPane, tableScrollPane);                           
+        ctrlPane.add(lblNombreArchivo);
+        splitPane.setDividerLocation(35);
+        splitPane.setEnabled(false);
+        frame = new JFrame("Al SUM de la biblioteca");
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.getContentPane().add(splitPane);        
+        JPanel panel = new JPanel();        
+        frame.getContentPane().add(panel, BorderLayout.SOUTH);
+        panel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
+        panel.add(lblTotalAulasNecesarias);        
+        panel.add(lblCantidadAulas);
+        frame.pack();
+        frame.setLocationRelativeTo(null);
+        frame.setVisible(true);        
+        modificarTamanioColumnas();
+             
+        cargarBotones();
+	}
+	
+	private void cargarBotones() {
 		JButton btnElegirArchivo = new JButton("Elegir Archivo");
-		btnElegirArchivo.setBounds(38, 114, 231, 78);
+		btnElegirArchivo.setBounds(347, 5, 135, 23);
 		btnElegirArchivo.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				
+				fileChooser = new JFileChooser();
+				FileNameExtensionFilter filter = new FileNameExtensionFilter("JSON FILES", "json", "json");
+				fileChooser.setFileFilter(filter);
 		        int returnVal = fileChooser.showOpenDialog(frame);
-
+		        
+		        
+		        
 		        if (returnVal == JFileChooser.APPROVE_OPTION) {
-		            File file = fileChooser.getSelectedFile();
+		            File file = fileChooser.getSelectedFile();		       		           
+		            pathArchivo = file.getPath();
+		            lblNombreArchivo.setText(pathArchivo);
 		            
-		            Universidad uni = new Universidad();
-		            try {
-						uni.cargarMaterias(file.getPath());
-						uni.procesar();
-						CustomModel model = new CustomModel(uni.getAsignaciones());
-						table.setModel(model);
-						//showDataInTable(uni.getAsignaciones(), table);
-					} catch (Exception e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					}
-		            //This is where a real application would open the file.
-		            //log.append("Opening: " + file.getName() + "." + newline);
 		        } else {
-		            //log.append("Open command cancelled by user." + newline);
+		        	pathArchivo = null;
 		        }
-		   
-			
 			}
 		});
-		//frame.getContentPane().add(btnElegirArchivo);	
-
-		JPanel ctrlPane = new JPanel();
 		ctrlPane.add(btnElegirArchivo);
-		        
-		 
 		
-		        JSplitPane splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT,
-		
-		                ctrlPane, tableScrollPane);
-		
-		        splitPane.setDividerLocation(35);
-		
-		        splitPane.setEnabled(false);
-		
-		        frame = new JFrame("Swing JTable Demo");
-		        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-		        frame.add(splitPane);
-
-		        frame.pack();
-
-		        frame.setLocationRelativeTo(null);
-
-		        frame.setVisible(true);
-
-		
+		JButton btnProcesar = new JButton("Procesar");        
+        btnProcesar.setBounds(492, 5, 89, 23);
+        ctrlPane.add(btnProcesar);      
+        btnProcesar.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent arg0) {
+        		CustomModel model;
+        		Universidad uni = new Universidad();
+        		try {	            
+	            	if(hayArchivoSeleccionado()) {
+	            		uni.cargarMaterias(LectorArchivo.getContenido(pathArchivo));
+						SolverGoloso solucion =  new SolverGoloso(uni);
+						model = new CustomModel(solucion.resolver());
+						lblCantidadAulas.setText(String.valueOf(uni.cantidadAulas()));
+						table.setModel(model);
+						modificarTamanioColumnas();
+	            	} else {
+	            		JOptionPane.showMessageDialog(frame, "Elija un archivo a procesar.", "",
+	            			    JOptionPane.INFORMATION_MESSAGE);
+	            	}
+				} catch (Exception e1) {
+					JOptionPane.showMessageDialog(frame, "Error al procesar el archivo. Verifique su contenido.",
+							"Error Archivo", JOptionPane.ERROR_MESSAGE);
+				}	
+        	}			
+        });
 	}
 	
-	public void showDataInTable(ArrayList<Asignacion> listOfBooks, JTable table){
-	     DefaultTableModel model = new DefaultTableModel(new Object[]{"Title", "Author"}, 0);
-	     for(Asignacion book:listOfBooks){
-	          model.addRow(new Object[]{book.getMateriaCodigo(), book.getMateriaNombre()});
-	     }
-	     table.setModel(model);
+	private void modificarTamanioColumnas() {
+		table.getColumnModel().getColumn(1).setPreferredWidth(150);
+        table.getColumnModel().getColumn(2).setPreferredWidth(200);
+	}
+	
+	private boolean hayArchivoSeleccionado() {
+		return pathArchivo != null;
 	}
 }
-
-class CustomModel extends AbstractTableModel {
-
-    List<Asignacion> data;
-    String[] columnNames = {"Name", "Age"};
-
-    public CustomModel(ArrayList<Asignacion> listOfBooks) {
-        data = listOfBooks;
-
-        
-
-
-    }
-
-    @Override
-    public String getColumnName(int column) {
-        return columnNames[column];
-    }
-
-    @Override
-    public int getColumnCount() {
-        return 2;
-    }
-
-    @Override
-    public int getRowCount() {
-        return data.size();
-    }
-
-    @Override
-    public Object getValueAt(int rowIndex, int columnIndex) {
-        Asignacion student = data.get(rowIndex);
-        switch (columnIndex) {
-        case 0:
-            return student.getMateriaCodigo();
-        case 1:
-            return student.getMateriaNombre();
-        default:
-            return null;
-        }
-    }
-
-}
-
-

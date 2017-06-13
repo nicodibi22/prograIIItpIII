@@ -2,11 +2,11 @@ package negocio;
 
 public class Aula {
 
-	private String _codigo;
+	private String codigo;
 	
 	public static Aula aulaNueva(String codigo) {
 		Aula aula = new Aula();
-		aula._codigo = codigo;
+		aula.codigo = codigo;
 		return aula;
 	}	
 	
@@ -18,7 +18,7 @@ public class Aula {
 	}
 	
 	public String getCodigo() {
-		return _codigo;
+		return codigo;
 	}
 
 	@Override
@@ -37,7 +37,7 @@ public class Aula {
 
 		Aula aula = (Aula) obj;
 
-		if (this._codigo.equals(aula.getCodigo())) {
+		if (this.codigo.equals(aula.getCodigo())) {
 			return true;
 		}
 		return false;

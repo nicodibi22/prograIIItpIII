@@ -1,13 +1,6 @@
 package negocio;
 
-import java.io.Serializable;
-
-public class Materia implements Serializable {
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+public class Materia {
 
 	private String nombre;
 	
@@ -39,6 +32,29 @@ public class Materia implements Serializable {
 	public int getHoraFin() {
 		return horaFin;
 	}
-
 	
+	@Override
+	public boolean equals(Object obj) {
+		
+		if (this == obj) {
+			return true;
+		}
+
+		if (obj == null) {
+			return false;
+		}
+
+		if (getClass() != obj.getClass())
+			return false;
+
+		Materia materia = (Materia) obj;
+
+		if (this.codigo.equals(materia.getCodigo()) && 
+				this.nombre.equals(materia.getNombre()) &&
+				this.horaInicio == materia.getHoraInicio() &&
+				this.horaFin == materia.getHoraFin()) {
+			return true;
+		}
+		return false;
+	}
 }
