@@ -14,15 +14,18 @@ public class Universidad {
 	
 	private List<Aula> _aulas;
 	
-	private Map<Aula, List<Materia>> _asignaciones;
+	private ArrayList<Asignacion> _asignaciones;
+	
+	private Map<Aula, ArrayList<Materia>> _materiasPorAula;
 	
 	public Universidad() {
 		_materias = new ArrayList<Materia>();
 		_aulas = new ArrayList<Aula>();
-		_asignaciones = new HashMap<Aula, List<Materia>>();
+		_asignaciones = new ArrayList<Asignacion>();
+		_materiasPorAula = new HashMap<Aula, ArrayList<Materia>>();
 	}
 	
-	public boolean agregarMaterias(String nombreArchivo) throws Exception {
+	public boolean cargarMaterias(String nombreArchivo) throws Exception {
 		
 		_materias = DaoMateria.getMaterias(nombreArchivo);
 		
@@ -47,8 +50,7 @@ public class Universidad {
 		for (Materia materia : _materias) {
 			asignarAula(materia);
 		}
-	}
-	
+	}	
 	
 	private void asignarAula(Materia materia) {
 		Aula aulaAsignar = Aula.aulaVacia();
@@ -61,12 +63,13 @@ public class Universidad {
 		}
 		if(!hayAulaVacia) {
 			agregarAula();
-			_asignaciones.put(_aulas.get(cantidadAulas()- 1), new ArrayList<Materia>());
+			aulaAsignar = _aulas.get(cantidadAulas()- 1);
+			_materiasPorAula.put(aulaAsignar, new ArrayList<Materia>());
 		}
-		
-		List<Materia> materiasAula = _asignaciones.get(aulaAsignar);
+		_asignaciones.add(new Asignacion(aulaAsignar, materia));
+		ArrayList<Materia> materiasAula = _materiasPorAula.get(aulaAsignar);
 		materiasAula.add(materia);
-		_asignaciones.put(aulaAsignar, materiasAula);
+		_materiasPorAula.put(aulaAsignar, materiasAula);
 
 		
 	}
@@ -77,12 +80,22 @@ public class Universidad {
 	
 	public boolean estaOcupada(Aula aula, int horaInicio, int horaFin) {
 		
-		for(Materia mat : _asignaciones.get(aula)) {
+		for(Materia mat : _materiasPorAula.get(aula)) {
 			if(mat.getHoraInicio() <= horaInicio &&  mat.getHoraFin() >  horaInicio
 					|| mat.getHoraInicio() < horaFin && mat.getHoraFin() >= horaFin) {
 				return true;
 			}
 		}
 		return false;
+	}
+	
+	public ArrayList<Materia> getMateriasPorAula(String codigoAula) {
+		Aula aulaBusqueda = Aula.aulaNueva(codigoAula);
+		return _materiasPorAula.get(aulaBusqueda);
+	}		
+	
+	public ArrayList<Asignacion> getAsignaciones() {
+		//Aula aulaBusqueda = Aula.aulaNueva(codigoAula);
+		return _asignaciones;
 	}
 }

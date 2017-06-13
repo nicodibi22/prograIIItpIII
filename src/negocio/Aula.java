@@ -21,5 +21,25 @@ public class Aula {
 		return _codigo;
 	}
 
-	
+	@Override
+	public boolean equals(Object obj) {
+		
+		if (this == obj) {
+			return true;
+		}
+
+		if (obj == null) {
+			return false;
+		}
+
+		if (getClass() != obj.getClass())
+			return false;
+
+		Aula aula = (Aula) obj;
+
+		if (this._codigo.equals(aula.getCodigo())) {
+			return true;
+		}
+		return false;
+	}
 }
