@@ -12,7 +12,7 @@ class CustomModel extends AbstractTableModel {
 
 	private static final long serialVersionUID = 1L;
 	List<Asignacion> data;
-    String[] columnNames = {"Aula", "Código Materia", "Nombre Materia", "Hora Inicio", "Hora Fin"};
+    String[] columnNames = {"Aula", "Codigo Materia", "Nombre Materia", "Hora Inicio", "Hora Fin"};
 
     public CustomModel(ArrayList<Asignacion> asignaciones) {
         data = asignaciones;
